@@ -1,0 +1,61 @@
+<template>
+  <j-modal
+    :title="title"
+    :width="width"
+    :visible="visible"
+    switchFullscreen
+    @ok="handleOk"
+    :okButtonProps="{ class:{'jee-hidden': disableSubmit} }"
+    @cancel="handleCancel"
+    cancelText="关闭">
+    <ware-enter2-form ref="realForm" @ok="submitCallback" :disabled="disableSubmit"></ware-enter2-form>
+  </j-modal>
+</template>
+
+<script>
+
+  import WareEnter2Form from './WareEnter2Form'
+  export default {
+    name: 'WareEnter2Modal',
+    components: {
+      WareEnter2Form
+    },
+    data () {
+      return {
+        title:'',
+        width:800,
+        visible: false,
+        disableSubmit: false
+      }
+    },
+    methods: {
+      add () {
+        this.visible=true
+        this.$nextTick(()=>{
+          this.$refs.realForm.add();
+        })
+      },
+      edit (record) {
+        this.visible=true
+        this.$nextTick(()=>{
+          this.$refs.realForm.edit(record);
+        })
+      },
+      close () {
+        this.$emit('close');
+        this.visible = false;
+      },
+      handleOk () {
+        this.$refs.realForm.submitForm();
+      },
+      submitCallback(formDate){
+        console.log(formDate,"双击打开公司")
+        this.$emit('ok',formDate);
+        this.visible = false;
+      },
+      handleCancel () {
+        this.close()
+      }
+    }
+  }
+</script>
